@@ -1,6 +1,11 @@
+using Core.Interfaces;
+using Infrastructure;
+using Infrastructure.Repositoy;
+using Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,17 +18,25 @@ namespace web
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            services.AddControllersWithViews();
+            services.AddDbContext<DataContext>(op =>
+            {
+                op.UseSqlServer(Configuration.GetConnectionString("MyPotfolioDB"));
+            });
+            //services.AddRazorPages();
+            services.AddScoped(typeof(IUnitOfWork<>),typeof(UnitOfWork<>));
+            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +62,11 @@ namespace web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    "defaultRoute",
+                    "{controller=Home}/{action=index}/{id?}"
+                    );
+                //endpoints.MapRazorPages();
             });
         }
     }
