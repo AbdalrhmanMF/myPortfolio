@@ -46,15 +46,13 @@ namespace web.Controllers
             return View(portfolioItem);
         }
 
-        // GET: PortfolioItems/Create
+
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PortfolioItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PortFolioVM model)
@@ -83,7 +81,7 @@ namespace web.Controllers
             return View(model);
         }
 
-        // GET: PortfolioItems/Edit/5
+
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -108,9 +106,7 @@ namespace web.Controllers
             return View(portfolioViewModel);
         }
 
-        // POST: PortfolioItems/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, PortFolioVM model)
